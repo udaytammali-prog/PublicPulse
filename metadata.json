@@ -1,0 +1,6 @@
+{
+  "name": "Community Hero",
+  "description": "Hyperlocal Civic Issue Reporting App with AI auto-categorization, priority scoring, interactive mapping, community validation, and local services ratings.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
