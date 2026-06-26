@@ -64,29 +64,56 @@ export default function App() {
       }
     }
 
-    // Fetch initial datasets from Express REST APIs
-    const fetchData = async () => {
+    // Fetch initial datasets from Express REST APIs with retries for cold-starts
+    const fetchData = async (retries = 3, delay = 1500) => {
       try {
         const [issuesRes, providersRes] = await Promise.all([
           fetch("/api/issues"),
           fetch("/api/services"),
         ]);
+
+        if (!issuesRes.ok || !providersRes.ok) {
+          throw new Error(`HTTP error: ${issuesRes.status} / ${providersRes.status}`);
+        }
+
         const issuesData = await issuesRes.json();
         const providersData = await providersRes.json();
 
         setIssues(issuesData);
         setProviders(providersData);
-      } catch (e) {
-        console.error("Failed to fetch initial server state", e);
-      } finally {
         setIsLoading(false);
+      } catch (e) {
+        if (retries > 0) {
+          console.warn(`Initial fetch failed. Retrying in ${delay}ms... (${retries} retries left)`);
+          setTimeout(() => fetchData(retries - 1, delay * 1.5), delay);
+        } else {
+          console.error("Failed to fetch initial server state after retries", e);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    const fetchPeriodic = async () => {
+      try {
+        const [issuesRes, providersRes] = await Promise.all([
+          fetch("/api/issues"),
+          fetch("/api/services"),
+        ]);
+        if (issuesRes.ok && providersRes.ok) {
+          const issuesData = await issuesRes.json();
+          const providersData = await providersRes.json();
+          setIssues(issuesData);
+          setProviders(providersData);
+        }
+      } catch (e) {
+        console.error("Periodic sync failed", e);
       }
     };
 
     fetchData();
 
     // Check issues status periodically (every 10 seconds) to simulate background timers
-    const timer = setInterval(fetchData, 10000);
+    const timer = setInterval(fetchPeriodic, 10000);
     return () => clearInterval(timer);
   }, []);
 
