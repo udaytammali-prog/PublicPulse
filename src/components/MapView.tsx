@@ -13,8 +13,17 @@ export default function MapView({ issues, onSelectIssue }: MapViewProps) {
   const [userLocationActive, setUserLocationActive] = useState(false);
   const [activePinId, setActivePinId] = useState<string | null>(null);
 
-  // Filter issues based on chip selection
+  // Coordinates for user location simulation
+  const userGps = { x: 45, y: 50 };
+
+  // Filter issues based on chip selection and user location proximity
   const filteredIssues = issues.filter((issue) => {
+    if (userLocationActive) {
+      const distance = Math.sqrt(
+        Math.pow(issue.gps.x - userGps.x, 2) + Math.pow(issue.gps.y - userGps.y, 2)
+      );
+      if (distance > 25) return false; // Only show issues close to the user's position (radius of 25)
+    }
     if (selectedFilter === "All") return true;
     if (selectedFilter === "Garbage" && issue.category === "Garbage") return true;
     return issue.category === selectedFilter;
@@ -22,9 +31,6 @@ export default function MapView({ issues, onSelectIssue }: MapViewProps) {
 
   // Get active selected pin for the sliding bottom sheet drawer
   const activeIssue = issues.find((i) => i.id === activePinId);
-
-  // Coordinates for user location simulation
-  const userGps = { x: 45, y: 50 };
 
   const handleZoomIn = () => setZoomLevel((z) => Math.min(z + 0.25, 2));
   const handleZoomOut = () => setZoomLevel((z) => Math.max(z - 0.25, 0.75));
@@ -163,6 +169,21 @@ export default function MapView({ issues, onSelectIssue }: MapViewProps) {
 
       {/* Map Vector Canvas Stage Area */}
       <div className="flex-1 relative overflow-hidden bg-white flex items-center justify-center">
+        {userLocationActive && (
+          <div className="absolute top-4 left-4 right-4 z-20 bg-blue-600 text-white text-[10px] font-bold px-3 py-2 rounded-xl shadow-lg flex items-center justify-between animate-in slide-in-from-top duration-200">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Compass className="w-3.5 h-3.5 text-white animate-spin-slow shrink-0" />
+              <span className="truncate">Showing problems near you ({filteredIssues.length})</span>
+            </div>
+            <button
+              onClick={() => setUserLocationActive(false)}
+              className="bg-blue-700 hover:bg-blue-850 text-white font-bold text-[8px] uppercase tracking-wider px-2 py-1 rounded-md transition-colors cursor-pointer shrink-0"
+            >
+              Show All
+            </button>
+          </div>
+        )}
+
         {/* SVG Schematic Roadmap of Jubilee Hills */}
         <div
           className="absolute inset-0 transition-transform duration-300 origin-center flex items-center justify-center"

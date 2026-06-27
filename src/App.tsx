@@ -46,6 +46,17 @@ export default function App() {
   const [prefillReport, setPrefillReport] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Global Theme Mode state
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    return (localStorage.getItem("community_hero_theme") as "light" | "dark") || "light";
+  });
+
+  const handleToggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    localStorage.setItem("community_hero_theme", nextTheme);
+  };
+
   // Login Form States (Lightweight auth)
   const [loginName, setLoginName] = useState("Uday Tammali");
   const [loginPhone, setLoginPhone] = useState("+91 91234 56789");
@@ -281,6 +292,8 @@ export default function App() {
             userAvatar={user.avatarUrl}
             areaName={areaName}
             onUpdateAreaName={handleUpdateAreaName}
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
           />
         );
       case "map":
@@ -310,6 +323,8 @@ export default function App() {
             }}
             onUpdateProfile={handleUpdateProfile}
             onLogOut={handleLogOut}
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
           />
         );
       case "dashboard":
@@ -322,7 +337,7 @@ export default function App() {
   // Pre-seed layout if server dataset is fetching
   if (isLoading && issues.length === 0) {
     return (
-      <PhoneFrame>
+      <PhoneFrame theme={theme}>
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 bg-white">
           <Loader2 className="w-10 h-10 text-gray-900 animate-spin" />
           <div className="text-sm font-semibold text-gray-800">Synchronizing Local Hub...</div>
@@ -335,7 +350,7 @@ export default function App() {
   }
 
   return (
-    <PhoneFrame>
+    <PhoneFrame theme={theme}>
       {!user ? (
         /* Lightweight Login screen */
         <div className="flex-1 flex flex-col justify-center px-6 py-12 select-none bg-white animate-in fade-in duration-200">

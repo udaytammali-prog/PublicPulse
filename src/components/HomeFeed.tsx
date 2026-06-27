@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Sparkles, ThumbsUp, Loader2, Navigation, Search, Check, X } from "lucide-react";
+import { MapPin, Sparkles, ThumbsUp, Loader2, Navigation, Search, Check, X, Sun, Moon } from "lucide-react";
 import { Issue } from "../types";
 
 interface HomeFeedProps {
@@ -12,6 +12,8 @@ interface HomeFeedProps {
   userAvatar?: string;
   areaName: string;
   onUpdateAreaName: (newArea: string) => void;
+  theme: "light" | "dark";
+  onToggleTheme: () => void;
 }
 
 export default function HomeFeed({
@@ -24,6 +26,8 @@ export default function HomeFeed({
   userAvatar,
   areaName,
   onUpdateAreaName,
+  theme,
+  onToggleTheme,
 }: HomeFeedProps) {
   // Dynamic Location States
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -164,19 +168,44 @@ export default function HomeFeed({
             <span className="underline decoration-dotted decoration-gray-400 hover:text-gray-850">Tap to set current location</span>
           </div>
         </div>
-        <button
-          onClick={onNavigateToProfile}
-          className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-900 overflow-hidden font-semibold text-sm transition-all shadow-sm cursor-pointer"
-        >
-          {userAvatar ? (
-            <img src={userAvatar} alt={userName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          ) : (
-            userName
-              .split(" ")
-              .map((word) => word[0])
-              .join("")
-          )}
-        </button>
+        <div className="flex items-center gap-2.5 shrink-0">
+          {/* Sliding Switch Toggle */}
+          <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-150 rounded-full py-1 px-2.5 shadow-sm">
+            {theme === "dark" ? (
+              <Moon className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            ) : (
+              <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+            )}
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              className={`w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 focus:outline-none relative cursor-pointer flex items-center ${
+                theme === "dark" ? "bg-blue-600" : "bg-gray-200"
+              }`}
+              aria-label="Toggle dark mode"
+            >
+              <div
+                className={`bg-white w-3.5 h-3.5 rounded-full shadow-sm transform duration-200 ease-in-out ${
+                  theme === "dark" ? "translate-x-3.5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          <button
+            onClick={onNavigateToProfile}
+            className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-900 overflow-hidden font-semibold text-sm transition-all shadow-sm cursor-pointer"
+          >
+            {userAvatar ? (
+              <img src={userAvatar} alt={userName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            ) : (
+              userName
+                .split(" ")
+                .map((word) => word[0])
+                .join("")
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Stats Row */}

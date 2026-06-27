@@ -15,3 +15,112 @@
   scrollbar-width: none;
 }
 
+/* ==========================================
+   ELEGANT DARK THEME OVERRIDES FOR CONTAINER
+   ========================================== */
+.dark {
+  background-color: #0b0f19 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Backgrounds */
+.dark .bg-white {
+  background-color: #0b0f19 !important;
+}
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+.dark .bg-gray-100 {
+  background-color: #1f2937 !important;
+}
+
+/* Text Colors */
+.dark .text-gray-950,
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+.dark .text-gray-800,
+.dark .text-gray-700 {
+  color: #e5e7eb !important;
+}
+.dark .text-gray-600 {
+  color: #d1d5db !important;
+}
+.dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+.dark .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+/* Borders */
+.dark .border-gray-100,
+.dark .border-gray-150,
+.dark .border-gray-200,
+.dark .border-gray-200\/50,
+.dark .border-gray-300 {
+  border-color: #1f2937 !important;
+}
+
+/* Inputs, Selects, Textareas */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+  border-color: #1f2937 !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #4b5563 !important;
+}
+
+/* Card Shadows */
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-2xl {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Buttons & Pill States */
+.dark .bg-gray-950 {
+  background-color: #f3f4f6 !important;
+  color: #0b0f19 !important;
+}
+.dark .bg-gray-950 .text-white {
+  color: #0b0f19 !important;
+}
+.dark .bg-gray-950 * {
+  color: #0b0f19 !important;
+}
+.dark .text-white {
+  color: #ffffff !important;
+}
+.dark .bg-blue-600 {
+  background-color: #2563eb !important;
+}
+.dark .bg-green-600 {
+  background-color: #16a34a !important;
+}
+.dark .text-green-600 {
+  color: #4ade80 !important;
+}
+.dark .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+/* SVG Schematic Roadmap element map colors for high-contrast visibility */
+.dark svg path[stroke="#E5E7EB"] {
+  stroke: #1f2937 !important;
+}
+.dark svg path[fill="#F9FAFB"] {
+  fill: #0b0f19 !important;
+}
+.dark svg path[fill="#F3F4F6"] {
+  fill: #111827 !important;
+}
+.dark svg text {
+  fill: #e5e7eb !important;
+}
+
